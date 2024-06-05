@@ -1,6 +1,6 @@
 package com.example.demo.student;
 
-import java.util.List;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +17,16 @@ public class StudentService {
 
     public List<Student> getStudents(){
         return studentRepository.findAll();
+    }
+
+    public void addNewStudent(Student student) {
+        Optional<Student> studentByEmailOptional = studentRepository.findStudentByEmail(student.getEmail());
+        
+        if (studentByEmailOptional.isPresent()){
+            throw new IllegalStateException("Email taken");
+        }
+
+        studentRepository.save(student);
     }
 
 }
